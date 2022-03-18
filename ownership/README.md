@@ -169,3 +169,65 @@ fn takes_and_gives_back(a_string: String) -> String {
 
 변수의 소유권은 모든 순간 똑같은 패턴을 따름,
 값들이 다른 변수에 의해 소우되도록 이동하지 않는한 drop에 의해 제거된다.
+
+
+
+
+
+
+# 참조자와 빌림(References and Borrowing)
+
+소유권을 넘기는 대신 개체에 대한 참조자를 인자로 사용하는 방법
+
+```
+fn main() {
+    let s1 = String::from("hi");
+
+    let len = cal_len(&s1);
+}
+
+fn cal_len(s : &String) -> uszie {
+    s.len()
+}
+
+```
+
+& 를 통해 값을 참조하는 참조자 생성,
+참조자가 스코프 밖으로 가도 메모리 반납 x
+
+기본적으로 참조자는 불변이지만
+
+mut 을 가진 변수에 대해 
+- &mut 참조자 가능
+- 하지만 &mut 는 하나만 가질 수 있다
+
+만약 mut 변수에 
+```
+let mut s1 = String::from("d");
+
+let s2 = &s;
+let s3 = &mut s // 이렇게 하면 에러가 난다
+
+```
+불변참조자가 가지고있을때 가변참조자를 하면 안댐
+
+
+
+### slice
+
+```
+fn first_word(s: &String) -> &str {
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[0..i];
+        }
+    }
+
+    &s[..]
+}
+```
+
+&str 값.. 스트링 리터럴도 슬라이스임
+
